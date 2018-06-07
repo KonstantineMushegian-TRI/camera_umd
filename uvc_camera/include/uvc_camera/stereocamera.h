@@ -27,7 +27,7 @@ class StereoCamera {
 
     uvc_cam::Cam *cam_left, *cam_right;
     int width, height, fps, skip_frames, frames_to_skip;
-    std::string left_device, right_device, frame;
+    std::string left_device, right_device, frame_id_left, frame_id_right;
     bool rotate_left, rotate_right;
 
     camera_info_manager::CameraInfoManager left_info_mgr, right_info_mgr;

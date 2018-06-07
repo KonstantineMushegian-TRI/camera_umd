@@ -60,7 +60,8 @@ StereoCamera::StereoCamera(ros::NodeHandle comm_nh, ros::NodeHandle param_nh) :
   frames_to_skip = 0;
   left_device = "/dev/video0";
   right_device = "/dev/video1";
-  frame = "camera";
+  frame_id_left = "camera_left";
+  frame_id_right = "camera_right";
   rotate_left = false;
   rotate_right = false;
 
@@ -86,7 +87,8 @@ StereoCamera::StereoCamera(ros::NodeHandle comm_nh, ros::NodeHandle param_nh) :
   pnode.getParam("width", width);
   pnode.getParam("height", height);
 
-  pnode.getParam("frame_id", frame);
+  pnode.getParam("frame_id_left", frame_id_left);
+  pnode.getParam("frame_id_right", frame_id_right);
 
   /* advertise image streams and info streams */
   left_pub = it.advertise("left/image_raw", 1);
@@ -185,8 +187,8 @@ void StereoCamera::sendInfo(ros::Time time) {
 
   info_left->header.stamp = time;
   info_right->header.stamp = time;
-  info_left->header.frame_id = frame;
-  info_right->header.frame_id = frame;
+  info_left->header.frame_id = frame_id_left;
+  info_right->header.frame_id = frame_id_right;
 
   left_info_pub.publish(info_left);
   right_info_pub.publish(info_right);
@@ -228,8 +230,8 @@ void StereoCamera::feedImages() {
 	image_right->header.stamp = capture_time;
 	image_right->header.seq = pair_id;
 
-	image_left->header.frame_id = frame;
-	image_right->header.frame_id = frame;
+	image_left->header.frame_id = frame_id_left;
+	image_right->header.frame_id = frame_id_right;
 
 	image_left->data.resize(image_left->step * image_left->height);
 	image_right->data.resize(image_right->step * image_right->height);
